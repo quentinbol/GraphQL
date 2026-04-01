@@ -11,7 +11,7 @@ import { config } from './config/env.config';
 async function startServer(): Promise<void> {
   const app = express();
 
-  if (process.env.USE_MOCK_REPOSITORY === 'false')
+  if (!config.useMockRepository)
     await mongoose.connect(config.dbUrl);
 
   const server = new ApolloServer({
@@ -37,6 +37,7 @@ async function startServer(): Promise<void> {
   });
 
   app.listen(config.port, () => {
+    console.log(`Repository mode: ${config.useMockRepository ? 'in-memory' : 'mongo'}`);
     console.log(`Server ready at http://localhost:${config.port}/graphql`);
     console.log(`GraphQL Sandbox at http://localhost:${config.port}/graphql`);
   });

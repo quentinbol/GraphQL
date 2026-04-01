@@ -5,7 +5,7 @@ import { StudentService } from '../services/student.service';
 import { StudentController } from '../controllers/student.controller';
 import { config } from './env.config';
 
-const useMockRepository = config.nodeEnv === 'development';
+const useMockRepository = config.useMockRepository;
 
 const studentRepository: IStudentRepository = useMockRepository
 	? new InMemoryStudentRepository()
