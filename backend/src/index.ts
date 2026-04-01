@@ -1,14 +1,18 @@
 import express from 'express';
 import cors from 'cors';
 import { ApolloServer } from '@apollo/server';
-import { expressMiddleware } from '@apollo/server/express4';
+import { expressMiddleware } from '@as-integrations/express4';
 import { typeDefs } from './schema/typeDefs';
 import { resolvers } from './schema/resolvers';
+import mongoose from 'mongoose';
+import { config } from './config/env.config';
 
-const PORT = process.env.PORT || 4000;
 
 async function startServer(): Promise<void> {
   const app = express();
+
+  if (process.env.USE_MOCK_REPOSITORY === 'false')
+    await mongoose.connect(config.dbUrl);
 
   const server = new ApolloServer({
     typeDefs,
@@ -32,8 +36,9 @@ async function startServer(): Promise<void> {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  app.listen(PORT, () => {
-    console.log(`GraphQL sandbox : http://localhost:${PORT}/graphql`);
+  app.listen(config.port, () => {
+    console.log(`Server ready at http://localhost:${config.port}/graphql`);
+    console.log(`GraphQL Sandbox at http://localhost:${config.port}/graphql`);
   });
 }
 
