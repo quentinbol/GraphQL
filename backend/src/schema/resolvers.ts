@@ -1,18 +1,20 @@
 import { StudentController } from '../controllers/student.controller';
 import { Student, StudentModel } from '../models/Student';
 
+const studentController = new StudentController();
+
 export const resolvers = {
   Query: {
     students: (): Student[] => {
-      return StudentController.getAllStudents();
+      return studentController.getAllStudents();
     },
 
     student: (_: unknown, args: { id: string }): Student => {
-      return StudentController.getStudentById(args.id);
+      return studentController.getStudentById(args.id);
     },
 
     studentCount: (): number => {
-      return StudentController.getStudentCount();
+      return studentController.getStudentCount();
     },
   },
 
@@ -21,7 +23,7 @@ export const resolvers = {
       _: unknown,
       args: { input: { name: string; completedCredits: number } }
     ): Student => {
-      return StudentController.addStudent(args.input);
+      return studentController.addStudent(args.input);
     },
   },
 
