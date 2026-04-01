@@ -3,16 +3,22 @@ import { Button } from "@/components/ui/button";
 import { useStudents } from "@/hooks/useStudents";
 import { Tab } from "@/pages/Dashboard";
 import { Separator } from "@radix-ui/react-separator";
+import { AcademicStanding } from "@shared/types";
 import { GraduationCap, UserPlus, Users } from "lucide-react";
 
-const Sidebar = ({ activeTab, setActiveTab }: { activeTab: Tab; setActiveTab: (tab: Tab) => void }) => {
+interface Props {
+    activeTab: Tab;
+    setActiveTab: (tab: Tab) => void;
+}
+
+const Sidebar = ({ activeTab, setActiveTab }: Props) => {
 
     const { students, studentCount } = useStudents();
 
-    const seniorCount = students.filter(s => s.academicStanding === 'Senior').length;
-    const juniorCount = students.filter(s => s.academicStanding === 'Junior').length;
-    const sophCount = students.filter(s => s.academicStanding === 'Sophomore').length;
-    const freshCount = students.filter(s => s.academicStanding === 'Freshman').length;
+    const seniorCount = students.filter(s => s.academicStanding === AcademicStanding.Senior).length;
+    const juniorCount = students.filter(s => s.academicStanding === AcademicStanding.Junior).length;
+    const sophCount = students.filter(s => s.academicStanding === AcademicStanding.Sophomore).length;
+    const freshCount = students.filter(s => s.academicStanding === AcademicStanding.Freshman).length;
 
     return (
         <aside className="w-56 shrink-0 border-r flex flex-col bg-card">
@@ -58,10 +64,10 @@ const Sidebar = ({ activeTab, setActiveTab }: { activeTab: Tab; setActiveTab: (t
                     Standing
                 </p>
                 {[
-                    { label: 'Senior', count: seniorCount, cls: 'bg-rose-500' },
-                    { label: 'Junior', count: juniorCount, cls: 'bg-amber-500' },
-                    { label: 'Sophomore', count: sophCount, cls: 'bg-blue-500' },
-                    { label: 'Freshman', count: freshCount, cls: 'bg-emerald-500' },
+                    { label: AcademicStanding.Senior, count: seniorCount, cls: 'bg-rose-500' },
+                    { label: AcademicStanding.Junior, count: juniorCount, cls: 'bg-amber-500' },
+                    { label: AcademicStanding.Sophomore, count: sophCount, cls: 'bg-blue-500' },
+                    { label: AcademicStanding.Freshman, count: freshCount, cls: 'bg-emerald-500' },
                 ].map(({ label, count, cls }) => (
                     <div key={label} className="flex items-center gap-2 text-xs">
                         <span className={`w-2 h-2 rounded-full ${cls}`} />

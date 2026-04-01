@@ -12,17 +12,17 @@ interface Props {
 }
 
 const standingColor: Record<string, string> = {
-  Freshman:  'bg-emerald-100 text-emerald-700 border-emerald-200',
+  Freshman: 'bg-emerald-100 text-emerald-700 border-emerald-200',
   Sophomore: 'bg-blue-100 text-blue-700 border-blue-200',
-  Junior:    'bg-amber-100 text-amber-700 border-amber-200',
-  Senior:    'bg-rose-100 text-rose-700 border-rose-200',
+  Junior: 'bg-amber-100 text-amber-700 border-amber-200',
+  Senior: 'bg-rose-100 text-rose-700 border-rose-200',
 };
 
 const avatarColor: Record<string, string> = {
-  Freshman:  'bg-emerald-500',
+  Freshman: 'bg-emerald-500',
   Sophomore: 'bg-blue-500',
-  Junior:    'bg-amber-500',
-  Senior:    'bg-rose-500',
+  Junior: 'bg-amber-500',
+  Senior: 'bg-rose-500',
 };
 
 const StudentCard: React.FC<Props> = ({ student, onSelect, isSelected }) => {
@@ -33,9 +33,8 @@ const StudentCard: React.FC<Props> = ({ student, onSelect, isSelected }) => {
   return (
     <Card
       onClick={() => onSelect(student.id)}
-      className={`cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 ${
-        isSelected ? 'ring-2 ring-primary shadow-md' : ''
-      }`}
+      className={`cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 ${isSelected ? 'ring-2 ring-primary shadow-md' : ''
+        }`}
     >
       <CardHeader className="pb-3">
         <div className="flex items-center gap-3">
