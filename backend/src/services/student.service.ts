@@ -1,35 +1,48 @@
-import { StudentStore } from "../data/studentStore";
-import { CreateStudentDto, Student, StudentModel } from "../models/Student";
+import { IStudentRepository } from '../repositories/IStudent.repository';
+import { StudentValidator }   from '../validators/student.validator';
+import { AcademicStanding } from '../types/student.types';
+import { NotFoundError, ConflictError } from '../errors/AppError';
+import { Student, CreateStudentDto }    from '../types/student.types';
 
 export class StudentService {
+  constructor(private readonly repository: IStudentRepository) {}
 
-    findAll(): Student[] {
-        return StudentStore.findAll();
+  async findAll(): Promise<Student[]> {
+    return this.repository.findAll();
+  }
+
+  async findById(id: string): Promise<Student> {
+    const student = await this.repository.findById(id);
+    if (!student)
+      throw new NotFoundError('Student', id);
+
+    return student;
+  }
+
+  async add(dto: CreateStudentDto): Promise<Student> {
+    StudentValidator.validate(dto);
+
+    const existing = await this.repository.findByName(dto.name);
+    if (existing) {
+      throw new ConflictError(`A student named "${dto.name.trim()}" already exists`);
     }
 
-    findById(id: string): Student {
-        const student = StudentStore.findById(id);
-        if (!student) {
-            throw new Error(`Student with ID "${id}" not found.`);
-        }
-        return student;
+    return this.repository.create(dto);
+  }
+
+  async count(): Promise<number> {
+    return this.repository.count();
+  }
+
+  getAcademicStanding(student: Student): AcademicStanding {
+    if (student.completedCredits >= 120) {
+      return AcademicStanding.Senior;
+    } else if (student.completedCredits >= 90) {
+      return AcademicStanding.Junior;
+    } else if (student.completedCredits >= 60) {
+      return AcademicStanding.Sophomore;
+    } else {
+      return AcademicStanding.Freshman;
     }
-
-    add(student: CreateStudentDto): Student {
-        StudentModel.validate(student);
-
-        const existing = StudentStore.findAll().find(
-            (s) => s.name.toLowerCase() === student.name.trim().toLowerCase()
-        );
-        if (existing) {
-            throw new Error(`A student named "${student.name}" already exists.`);
-        }
-
-        return StudentStore.create(student.name, student.completedCredits);
-    }
-
-    count(): number {
-        return StudentStore.count();
-    }
-
+  }
 }
