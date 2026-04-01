@@ -1,24 +1,26 @@
-// CONTROLLER: Business logic layer between schema and data store
-
-import { Student, CreateStudentDto } from '../models/Student';
 import { StudentService } from '../services/student.service';
+import { Student, CreateStudentDto, AcademicStanding } from '../types/student.types';
 
 export class StudentController {
-  private studentService = new StudentService();
+  constructor(private readonly studentService: StudentService) { }
 
-  getAllStudents(): Student[] {
+  async getAllStudents(): Promise<Student[]> {
     return this.studentService.findAll();
   }
 
-  getStudentById(id: string): Student {
+  async getStudentById(id: string): Promise<Student> {
     return this.studentService.findById(id);
   }
 
-  addStudent(input: CreateStudentDto): Student {
-    return this.studentService.add(input);
+  async addStudent(dto: CreateStudentDto): Promise<Student> {
+    return this.studentService.add(dto);
   }
 
-  getStudentCount(): number {
+  async getStudentCount(): Promise<number> {
     return this.studentService.count();
+  }
+
+  getAcademicStanding(student: Student): AcademicStanding {
+    return this.studentService.getAcademicStanding(student);
   }
 }
